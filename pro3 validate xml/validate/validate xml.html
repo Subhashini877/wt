@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Validation Example</title>
+</head>
+<body>
+    <h1>XML Validation Result</h1>
+    <div id="validationResult"></div>
+    
+    <h2>XML File Content</h2>
+    <pre id="xmlContentDisplay"></pre>
+
+    <input type="file" id="xmlFileInput" />
+    
+    <script>
+        // Function to read the selected XML file
+        function readXMLFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const xmlContent = event.target.result;
+                displayXMLContent(xmlContent);
+                validateXML(xmlContent);
+            };
+            reader.readAsText(file);
+        }
+
+        // Validate XML (basic well-formedness check)
+        function validateXML(xmlContent) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+            
+            // Check for any errors in XML
+            if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                document.getElementById("validationResult").innerHTML = "Invalid XML!";
+            } else {
+                document.getElementById("validationResult").innerHTML = "Valid XML!";
+            }
+        }
+
+        // Display XML content in the browser
+        function displayXMLContent(xmlContent) {
+            document.getElementById("xmlContentDisplay").textContent = xmlContent;
+        }
+
+        // Event listener for file input
+        document.getElementById("xmlFileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                readXMLFile(file);
+            }
+        });
+    </script>
+</body>
+</html>
